@@ -1,0 +1,14 @@
+setup.py
+database/__init__.py
+database/database_drive.py
+lista_1.egg-info/PKG-INFO
+lista_1.egg-info/SOURCES.txt
+lista_1.egg-info/dependency_links.txt
+lista_1.egg-info/top_level.txt
+src/__init__.py
+src/main.py
+src/domain/__init__.py
+src/utils/__init__.py
+src/utils/error_handler.py
+src/utils/logger.py
+src/utils/validation_handler.py

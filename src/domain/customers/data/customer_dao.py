@@ -1,0 +1,2 @@
+class CustomerDataAccess():
+    pass

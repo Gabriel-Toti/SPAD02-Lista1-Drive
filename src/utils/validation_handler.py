@@ -1,0 +1,2 @@
+class ValidationHandler():
+    pass

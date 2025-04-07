@@ -1,0 +1,2 @@
+class ProductDataAccess():
+    pass

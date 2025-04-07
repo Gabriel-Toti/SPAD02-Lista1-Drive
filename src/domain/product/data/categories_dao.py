@@ -1,0 +1,2 @@
+class CategoriesDataAccess():
+    pass

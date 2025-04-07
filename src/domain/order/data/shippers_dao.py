@@ -1,0 +1,2 @@
+class ShippersDataAccess():
+    pass
