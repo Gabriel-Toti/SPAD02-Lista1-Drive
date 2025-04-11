@@ -1,6 +1,7 @@
 from interfaces.addressed_entity import AddressedEntity
+from interfaces.database_table import DatabaseTable
 
-class Supplier(AddressedEntity):
+class Supplier(AddressedEntity, DatabaseTable):
     def __init__(self,
         supplier_id: int, company_name: str, contact_name: str,
         contact_title: str, phone: str, fax: str, home_page: str):

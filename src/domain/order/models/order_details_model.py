@@ -1,4 +1,5 @@
-class OrderDetails():
+from interfaces.database_table import DatabaseTable
+class OrderDetails(DatabaseTable):
     def __init__(self,
         order_id: int, product_id: int, unit_price: float, quantity: int, discount: float):
         
