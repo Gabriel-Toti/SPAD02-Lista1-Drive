@@ -1,4 +1,5 @@
-class Product():
+from interfaces.database_table import DatabaseTable
+class Product(DatabaseTable):
     def __init__(self,
         product_id: int, product_name: str, supplier_id: int, category_id: int,
         quantity_per_unit: str, unit_price: float, units_in_stock: int,

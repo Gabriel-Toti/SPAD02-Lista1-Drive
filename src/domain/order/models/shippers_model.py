@@ -1,4 +1,5 @@
-class Shipper():
+from interfaces.database_table import DatabaseTable
+class Shipper(DatabaseTable):
     def __init__(self, shipper_id: int, company_name: str, phone: str):
         self._shipper_id = shipper_id
         self._company_name = company_name

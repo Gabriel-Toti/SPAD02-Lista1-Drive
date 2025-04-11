@@ -1,4 +1,5 @@
-class Category():
+from interfaces.database_table import DatabaseTable
+class Category(DatabaseTable):
     def __init__(self, category_id: int, category_name: str, description: str):
         self._category_id = category_id
         self._category_name = category_name

@@ -1,9 +1,10 @@
-import datetime
+from datetime import date
+from interfaces.database_table import DatabaseTable
 
-class Order():
+class Order(DatabaseTable):
     def __init__(self,
-        order_id: int, customer_id: str, employee_id: int, order_date: datetime,
-        required_date: datetime, shipped_date: datetime, freight: float, ship_name: str,
+        order_id: int, customer_id: str, employee_id: int, order_date: date,
+        required_date: date, shipped_date: date, freight: float, ship_name: str,
         ship_address: str, ship_city: str, ship_region: str, ship_postal_code: str,
         ship_country: str, shipper_id: int):
         
@@ -21,7 +22,8 @@ class Order():
         self._ship_postal_code = ship_postal_code
         self._ship_country = ship_country
         self._shipper_id = shipper_id
-    
+        
+
     @property
     def order_id(self):
         return self.__order_id
@@ -91,15 +93,15 @@ class Order():
         self.__employee_id = employee_id
     
     @order_date.setter
-    def _order_date(self, order_date: datetime):
+    def _order_date(self, order_date: date):
         self.__order_date = order_date
     
     @required_date.setter
-    def _required_date(self, required_date: datetime):
+    def _required_date(self, required_date: date):
         self.__required_date = required_date
     
     @shipped_date.setter
-    def _shipped_date(self, shipped_date: datetime):
+    def _shipped_date(self, shipped_date: date):
         self.__shipped_date = shipped_date
     
     @freight.setter

@@ -1,7 +1,8 @@
 import datetime
+from interfaces.database_table import DatabaseTable
 from interfaces.addressed_entity import AddressedEntity
 
-class Employee(AddressedEntity):
+class Employee(AddressedEntity, DatabaseTable):
     def __init__(self,
         employee_id: int, last_name: str, first_name: str,
         title: str, title_of_courtesy: str, birth_date: datetime,

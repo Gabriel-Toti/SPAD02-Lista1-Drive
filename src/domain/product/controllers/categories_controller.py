@@ -1,5 +1,5 @@
-from product.models.categories_model import Category
-from product.data.categories_dao import CategoriesDataAccess
+from ..models.categories_model import Category
+from ..data.categories_dao import CategoriesDataAccess
 
 class CategoriesController():
     pass
