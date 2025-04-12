@@ -9,10 +9,12 @@ class DatabaseTable():
             string += f"{nome.replace('_' + self.__class__.__name__ + '__', '')}: {valor};\n"
         return string
     
-    def attributes(self):
+    def  attributes(self):
         attributes = []
 
         for attribute in self.__dict__.values():
-            attributes.append(str(attribute) if type(attribute) == date else attribute)
+            if(attribute == None):
+                continue
+            attributes.append(str(attribute) if type(attribute) != int else attribute)
 
         return tuple(attributes)

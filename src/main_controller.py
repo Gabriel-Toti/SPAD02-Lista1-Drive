@@ -12,7 +12,6 @@ from domain.product.controllers.suppliers_controller import SupliersController
 
 from domain.report.controllers.report_controller import ReportController
 
-from psycopg import Connection
 
 #TODO?: Provavelmente todos os controllers vão ter que importar o northwind e passar pros DAO -> Ainda pensando sobre como fazer
 
@@ -21,8 +20,5 @@ class MainController():
     def __init__(self):
         self.order_controller = OrderController()
     
-    def get_all_orders(self):
-        return self.order_controller.get_all_orders()
-    
-    def create_order(self):
+    def create_order(self): # TODO: Chamar na view
         return self.order_controller.create_order()

@@ -1,3 +1,4 @@
+from .errors.out_of_stock_exception import OutOfStockException
 from utils.logger import logger, MessageLevel
 from tkinter import messagebox
 from psycopg import OperationalError
@@ -9,6 +10,10 @@ class ErrorHandler():
     @staticmethod
     def catchError(error: Exception): # Gerar uma mensagem de erro
         #TODO: Adicionar os tipos de erros da aplicação para fazer a verificação
+
+        if type(error) == OutOfStockException:
+            return logger.log(error=error, level=MessageLevel.WARNING)
+
         if type(error) == OperationalError:
             if error.pgconn.status == 1:
                 return logger.log(error=error, level=MessageLevel.FATAL)
