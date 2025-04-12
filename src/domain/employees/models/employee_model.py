@@ -6,8 +6,11 @@ class Employee(AddressedEntity, DatabaseTable):
     def __init__(self,
         employee_id: int, last_name: str, first_name: str,
         title: str, title_of_courtesy: str, birth_date: datetime,
-        hire_date: datetime, home_phone: str, extension: str,
+        hire_date: datetime, address: str, city: str, region: str,
+        postal_code: str, country: str, home_phone: str, extension: str,
         reports_to: int, notes: str):
+
+        super().__init__(address, city, region, postal_code, country)
         
         self._employee_id = employee_id
         self._last_name = last_name

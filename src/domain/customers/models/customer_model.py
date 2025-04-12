@@ -1,10 +1,14 @@
 from interfaces.addressed_entity import AddressedEntity
 from interfaces.database_table import DatabaseTable
 
-class Customers(AddressedEntity, DatabaseTable):
+class Customer(AddressedEntity, DatabaseTable):
     def __init__(self,
         customer_id: str, company_name: str, contact_name: str,
-        contact_title: str, phone: str, fax: str):
+        contact_title: str, address: str, city: str, region: str,
+        postal_code: str, country: str, phone: str, fax: str):
+
+        super().__init__(address, city, region, postal_code, country)
+
         self._customer_id = customer_id
         self._company_name = company_name
         self._contact_name = contact_name
