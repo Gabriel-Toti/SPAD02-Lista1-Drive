@@ -62,6 +62,8 @@ class Product(DatabaseTable):
 
     @product_name.setter
     def _product_name(self, product_name: str):
+        if(len(product_name) > 35):
+            raise ValueError("Limite de caracteres excedido para product_name. max(35).")
         self.__product_name = product_name
 
     @supplier_id.setter
@@ -74,6 +76,8 @@ class Product(DatabaseTable):
 
     @quantity_per_unit.setter
     def _quantity_per_unit(self, quantity_per_unit: str):
+        if(len(quantity_per_unit) > 20):
+            raise ValueError("Limite de caracteres excedido para quantity_per_unit. max(20).")
         self.__quantity_per_unit = quantity_per_unit
 
     @unit_price.setter
@@ -94,4 +98,6 @@ class Product(DatabaseTable):
 
     @discontinued.setter
     def _discontinued(self, discontinued: str):
+        if(len(discontinued) > 1):
+            raise ValueError("Limite de caracteres excedido para discontinued. max(1).")
         self.__discontinued = discontinued

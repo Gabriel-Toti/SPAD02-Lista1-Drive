@@ -27,5 +27,5 @@ class OrderDataAccess():
         order_data = order.attributes()
 
         #Executa a consulta
-        session.execute(f"""insert into northwind.orders values {order_data};""")
+        session.execute(f"""insert into northwind.orders values {order_data};""".replace("'None'", "null"))
         logger.log("Order inserida com sucesso.")

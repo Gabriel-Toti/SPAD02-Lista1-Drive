@@ -2,6 +2,7 @@ from database.database_drive import database
 from ..models.product_model import Product
 from psycopg import Cursor
 from utils.logger import logger
+from utils.errors.not_found_exception import NotFoundException
 
 class ProductDataAccess():
     def __init__(self):
@@ -13,8 +14,10 @@ class ProductDataAccess():
         with database() as connection:
             with connection.cursor() as session:
                 session.execute(f"select * from northwind.products where productname = '{name}';")
-                row = session.fetchall()[0]
-                product = Product(*row)
+                row = session.fetchall()
+                if(len(row) == 0):
+                    raise NotFoundException(f"Produto '{name}' não encontrado.")
+                product = Product(*row[0])
         return product
     
     @staticmethod

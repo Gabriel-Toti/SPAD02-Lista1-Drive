@@ -13,8 +13,6 @@ class DatabaseTable():
         attributes = []
 
         for attribute in self.__dict__.values():
-            if(attribute == None):
-                continue
             attributes.append(str(attribute) if type(attribute) != int else attribute)
 
         return tuple(attributes)

@@ -21,6 +21,6 @@ class OrderDetailsDataAccess():
 
         order_data = str(details).replace("[", "").replace("]", "")
 
-        session.execute(f"insert into northwind.order_details values {order_data};")
+        session.execute(f"insert into northwind.order_details values {order_data};".replace("'None'", "null"))
         logger.log("Detalhes adicionados com sucesso.")
 

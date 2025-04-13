@@ -4,8 +4,8 @@ from interfaces.database_table import DatabaseTable
 class Customer(AddressedEntity, DatabaseTable):
     def __init__(self,
         customer_id: str, company_name: str, contact_name: str,
-        contact_title: str, address: str, city: str, region: str,
-        postal_code: str, country: str, phone: str, fax: str):
+        contact_title: str, address: str=None, city: str=None, region: str=None,
+        postal_code: str=None, country: str=None, phone: str=None, fax: str=None):
 
         super().__init__(address, city, region, postal_code, country)
 
@@ -42,24 +42,44 @@ class Customer(AddressedEntity, DatabaseTable):
     
     @customer_id.setter
     def _customer_id(self, customer_id: str):
+        
+        if(len(customer_id) > 5):
+            raise ValueError("Limite de caracteres excedido para customer_id. max(5).")
+        
         self.__customer_id = customer_id
 
     @company_name.setter
     def _company_name(self, company_name: str):
+
+        if(len(company_name) > 50):
+            raise ValueError("Limite de caracteres excedido para company_name. max(50).")
+
         self.__company_name = company_name
     
     @contact_name.setter
     def _contact_name(self, contact_name: str):
+        if(len(contact_name) > 30):
+            raise ValueError("Limite de caracteres excedido para contact_name. max(30).")
+        
         self.__contact_name = contact_name
 
     @contact_title.setter
     def _contact_title(self, contact_title: str):
+        if(len(contact_title) > 30):
+            raise ValueError("Limite de caracteres excedido para contact_title. max(30).")
+        
         self.__contact_title = contact_title
     
     @phone.setter
     def _phone(self, phone: str):
+        if(phone is not None and len(phone) > 17):
+            raise ValueError("Limite de caracteres excedido para phone. max(17).")
+        
         self.__phone = phone
 
     @fax.setter
     def _fax(self, fax: str):
-        self.__fax = fax #TODO Ajustar os constraints
+        if(fax is not None and len(fax) > 17):
+            raise ValueError("Limite de caracteres excedido para fax. max(17).")
+        
+        self.__fax = fax
