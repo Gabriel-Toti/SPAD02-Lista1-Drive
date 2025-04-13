@@ -1,7 +1,7 @@
 from domain.order.controllers.order_controller import OrderController
 
 from domain.report.controllers.report_controller import ReportController
-from main_view import mv
+import main_view as mv
 from tkinter import Tk
 
 class MainController():

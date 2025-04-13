@@ -1,6 +1,6 @@
 from ..models.report_model import ReportModel
 from ..data.report_dao import ReportDataAccess
-from ..views.report_view import ReportView
+from ..views import report_view
 from datetime import datetime
 
 class ReportController():
@@ -10,7 +10,7 @@ class ReportController():
     self.list = []
 
   def consultReport(self):
-    self.reportConsultView = ReportView.consultReportView(self)
+    self.reportConsultView = report_view.consultReportView(self)
 
 #-------------------
 

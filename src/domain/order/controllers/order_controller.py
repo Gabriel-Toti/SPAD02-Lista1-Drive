@@ -3,7 +3,7 @@ from ..data.order_details_dao import OrderDetailsDataAccess
 from domain.employees.data.employee_dao import EmployeeDataAccess
 from domain.customers.data.customer_dao import CustomerDataAccess
 from domain.product.data.product_dao import ProductDataAccess
-from ..views.order_view import OrderView
+from ..views import order_view
 from ..models.order_model import Order
 from ..models.order_details_model import OrderDetails
 from utils.error_handler import ErrorHandler
@@ -19,10 +19,10 @@ class OrderController():
         self.list = []
 
     def registerOrder(self):
-        self.orderRegisterView = OrderView.registerOrderView(self)
+        self.orderRegisterView = order_view.registerOrderView(self)
 
     def consultOrder(self):
-        self.orderConsultView = OrderView.consultOrderView(self)
+        self.orderConsultView = order_view.consultOrderView(self)
 
 #------------------------------------
 
