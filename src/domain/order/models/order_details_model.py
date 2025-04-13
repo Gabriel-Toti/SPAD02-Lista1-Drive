@@ -43,6 +43,8 @@ class OrderDetails(DatabaseTable):
 
     @quantity.setter
     def _quantity(self, quantity: int):
+        if(quantity <= 0):
+            raise ValueError("A quantidade do produto deve ser maior do que 0.")
         self.__quantity = quantity
 
     @discount.setter
