@@ -1,6 +1,6 @@
 from ..models.report_model import ReportModel
 from ..data.report_dao import ReportDataAccess
-from ..views.report_view import consultReportView as ReportView
+from ..views.report_view import ReportView
 from datetime import datetime
 
 class ReportController():
@@ -48,7 +48,6 @@ class ReportController():
     if self.list is not None:
       for i in self.list:
         #AJUSTAR CONFORME DEVOLUTIVA DO BD
-        str += 'Ranking: \n'
         #str += f'{i.employee_id} - Total de Pedidos: {i.orders} = {i.amount} \n'
 
         self.reportConsultView.showView('Relatório de Ranking', str)
