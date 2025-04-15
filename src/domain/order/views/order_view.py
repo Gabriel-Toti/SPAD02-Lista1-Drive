@@ -1,4 +1,5 @@
-from tkinter import messagebox, Frame, Label, Entry, Listbox, IntVar, Checkbutton, Button, Toplevel
+from tkinter import messagebox, Frame, Label, Entry, Listbox, IntVar, Checkbutton, Button, Toplevel, END
+from tkinter.ttk import Treeview
 
 class registerOrderView(Toplevel):
 
@@ -99,4 +100,24 @@ class consultOrderView(Toplevel):
     self.buttonSubmit.bind('<Button>', OrderController.searchHandler)
 
   def showView(self, title, msg):
-    messagebox.showinfo(title, msg)
+    self.__message_view = Toplevel(master=self)
+    self.__message_view.title(title)
+    messageLabel = Label(self.__message_view, text=msg, anchor="w")
+    messageLabel.pack(side="top", anchor="w")
+
+  def table(self, title, columns, rows, message):
+    self.__message_view = Toplevel(master=self)
+    self.__message_view.title(title)
+    messageLabel = Label(self.__message_view, text=message, anchor="w")
+    messageLabel.pack(expand=True)
+    table = Treeview(self.__message_view, columns=columns, show="headings")
+    for col in columns:
+      table.heading(col, text=col)
+      table.column(col, anchor="center")
+    for item in rows:
+      table.insert("", END, values=item)
+    table.pack(side="top", anchor="w", fill="both", expand=True)
+    close_button = Button(self.__message_view, text="Fechar")
+    close_button.pack(expand=True)
+    close_button.bind('<Button>', lambda event: self.__message_view.destroy())
+
