@@ -28,8 +28,10 @@ class OrderDetailsDataAccess():
     def create_many_order_details_safe(order_details: list[OrderDetails], session: Cursor):
         details = []
         for detail in order_details:
-            details.append(detail.attributes())
+            details.append(detail.attributes(True))
 
-        session.execute(f"insert into northwind.order_details values (%d, %d, %f, %f);", details)
+        print(details)
+
+        session.executemany(f"insert into northwind.order_details values (%s, %s, %s, %s, %s);", details)
         logger.log("Detalhes adicionados com sucesso.")
 

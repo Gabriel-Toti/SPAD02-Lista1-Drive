@@ -35,7 +35,9 @@ class OrderDataAccess():
     #OrderDetails criado pelo controller do Order e utilizado pelo controller principal para juntar tudo
 
         # Cria as tuplas para os dados    
-        order_data = order.attributes()
+        order_data = order.attributes(True)
+
+        print(order_data)
 
         #Executa a consulta
         session.execute(f"""insert into northwind.orders values (%s, %s, %s, %s);""", order_data)
