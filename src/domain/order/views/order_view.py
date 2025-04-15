@@ -71,10 +71,7 @@ class registerOrderView(Toplevel):
     self.buttonAdd.bind('<Button>', OrderController.enterAddHandler)
 
   def showView(self, title, msg):
-    self.__message_view = Toplevel(master=self)
-    self.__message_view.title(title)
-    messageLabel = Label(self.__message_view, text=msg, anchor="w")
-    messageLabel.pack(side="top", anchor="w")
+    messagebox.showinfo(title, msg)
 
 
 #--------------------------------------------------------------

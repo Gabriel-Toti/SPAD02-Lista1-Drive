@@ -29,3 +29,14 @@ class OrderDataAccess():
         #Executa a consulta
         session.execute(f"""insert into northwind.orders values {order_data};""".replace("'None'", "null"))
         logger.log("Order inserida com sucesso.")
+    
+    @staticmethod
+    def create_order_safe(order: Order, session: Cursor): # depende de outro DAO, então preciso do cursor pra manter dentro de uma mesma transação
+    #OrderDetails criado pelo controller do Order e utilizado pelo controller principal para juntar tudo
+
+        # Cria as tuplas para os dados    
+        order_data = order.attributes()
+
+        #Executa a consulta
+        session.execute(f"""insert into northwind.orders values (%s, %s, %s, %s);""", order_data)
+        logger.log("Order inserida com sucesso.")

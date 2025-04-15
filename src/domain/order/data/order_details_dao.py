@@ -23,4 +23,13 @@ class OrderDetailsDataAccess():
 
         session.execute(f"insert into northwind.order_details values {order_data};".replace("'None'", "null"))
         logger.log("Detalhes adicionados com sucesso.")
+    
+    @staticmethod
+    def create_many_order_details_safe(order_details: list[OrderDetails], session: Cursor):
+        details = []
+        for detail in order_details:
+            details.append(detail.attributes())
+
+        session.execute(f"insert into northwind.order_details values (%d, %d, %f, %f);", details)
+        logger.log("Detalhes adicionados com sucesso.")
 

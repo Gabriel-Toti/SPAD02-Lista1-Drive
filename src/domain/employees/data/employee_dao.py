@@ -10,6 +10,8 @@ class EmployeeDataAccess():
         employee = None
         with database() as connection:
             with connection.cursor() as session:
+                print(f"select * from northwind.employees where firstname = '{first_name}' and lastname = '{last_name}';")
+                #print("Nancy'; delete from northwind.order_details where orderid=11078; --")
                 session.execute(f"select * from northwind.employees where firstname = '{first_name}' and lastname = '{last_name}';")
                 row = session.fetchall()
                 if(len(row) == 0):
@@ -17,3 +19,16 @@ class EmployeeDataAccess():
                 employee = Employee(*row[0])
         return employee
 
+    @staticmethod
+    def get_employee_by_name_safe(first_name: str, last_name: str):
+        employee = None
+        with database() as connection:
+            with connection.cursor() as session:
+                print(f"select * from northwind.employees where firstname = '{first_name}' and lastname = '{last_name}';")
+                #"Nancy'; delete from northwind.order_details where orderid=11078; --"
+                session.execute(f"select * from northwind.employees where firstname = %s and lastname = %s;", (first_name, last_name))
+                row = session.fetchall()
+                if(len(row) == 0):
+                    raise NotFoundException("Empregado não encontrado.")
+                employee = Employee(*row[0])
+        return employee
