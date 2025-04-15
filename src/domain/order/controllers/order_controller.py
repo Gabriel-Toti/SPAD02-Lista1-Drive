@@ -11,6 +11,7 @@ from datetime import date, datetime
 from database.database_drive import database
 from src.utils.errors.out_of_stock_exception import OutOfStockException
 from tkinter import END
+from ...report.data.report_dao import ReportDataAccess
 
 
 class OrderController():
@@ -61,50 +62,58 @@ class OrderController():
 
     def enterAddHandler(self, event):
 
-        product_name = self.orderRegisterView.product_name.get().strip()
-        quantity = self.orderRegisterView.quantity.get().strip()
+        try:
+            product_name = self.orderRegisterView.product_name.get().strip()
+            quantity = self.orderRegisterView.quantity.get().strip()
 
-        if(product_name == ''):
-            raise ValueError("Preencha o nome do produto.")
+            if(product_name == ''):
+                raise ValueError("Preencha o nome do produto.")
+                
+            if (quantity == ''):
+                raise ValueError('Preencha a quantidade!')
             
-        if (quantity == ''):
-            raise ValueError('Preencha a quantidade!')
-        
-        if not quantity.isdigit() or int(quantity) <= 0:
-            raise ValueError("'Quantidade inválida!'")
+            if not quantity.isdigit() or int(quantity) <= 0:
+                raise ValueError("'Quantidade inválida!'")
 
-        self.list.append((product_name, int(quantity)))
-        self.orderRegisterView.frameListbox.insert(END, f"Produto: {product_name} | Quantidade: {quantity}")
-        
-        self.orderRegisterView.product_name.delete(
-            0, len(self.orderRegisterView.product_name.get()))
-        self.orderRegisterView.quantity.delete(
-            0, len(self.orderRegisterView.quantity.get()))
+            self.list.append((product_name, int(quantity)))
+            self.orderRegisterView.frameListbox.insert(END, f"Produto: {product_name} | Quantidade: {quantity}")
+        except Exception as error:
+            ErrorHandler.showError(ErrorHandler.catchError(error))
+        finally:
+            self.orderRegisterView.product_name.delete(
+                0, len(self.orderRegisterView.product_name.get()))
+            self.orderRegisterView.quantity.delete(
+                0, len(self.orderRegisterView.quantity.get()))
 
 #------------------------------------
 
     def searchHandler(self, event):
+        try:
+            order_id = self.orderConsultView.order_id.get()
 
-            order_id = self.orderConsultView.order_id.delete(
-                0, len(self.orderConsultView.order_id.get()))
+            if (order_id == ''):
+                raise ValueError('Preencha o id!')
+            
+            if not order_id.isdigit():
+                raise ValueError("'Id inválido!'")
 
-            report_data = self.__get_order_report(order_id)
+            report_data = self.__get_order_report(int(order_id))
             
             if (report_data is not None):
-                report = ''
-                #str += f'Pedido: {order.order_id}\n'
-                #str += f'Vendedor: {employee.first_name} {employee.last_name}\n'
-                #str += f'Cliente: {customer.customer_name}\n'
-                #str += f'Data: {order.order_date}\n'
-                #str += f'Itens do Pedido: \n'
-                #for i in self.order_details:
-                #  str += f'{i.product_name} - {i.quantity} = {i.total}\n'
+                report = ""
+                report += f'Pedido: {report_data["order_id"]}\n'
+                report += f'Vendedor: {report_data["employee_name"]}\n'
+                report += f'Cliente: {report_data["company_name"]}\n'
+                report += f'Data: {report_data["order_date"]}\n'
+                report += f'Itens do Pedido: \n'
 
-                self.orderConsultView.showView('Dados do Pedido', report)
-                self.orderConsultView.order_id.delete(
+
+                self.orderConsultView.table('Dados do Pedido', ['nome', 'quantidade', 'preço total'], report_data['products'], report)
+        except Exception as error:
+            ErrorHandler.showError(ErrorHandler.catchError(error))
+        finally:
+            self.orderConsultView.order_id.delete(
                     0, len(self.orderConsultView.order_id.get()))
-                return
-            self.orderConsultView.showView('Erro', 'Pedido não encontrado!')
 
 #------------------------------------
 
@@ -188,6 +197,8 @@ class OrderController():
             except Exception as error:
                 connetion.rollback()
                 raise error
-    def __get_order_report(self, order):
-        #LÓGICA QUE VERIFICA SE PEDIDO EXISTE NO BD E DEVOLVE RESULTADO (LIST)
-        pass
+    def __get_order_report(self, order: int):
+        try:
+            return ReportDataAccess.order_report(order)
+        except Exception as error:
+            raise error
