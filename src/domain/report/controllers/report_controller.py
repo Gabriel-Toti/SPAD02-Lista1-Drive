@@ -1,4 +1,3 @@
-from ..models.report_model import ReportModel
 from ..data.report_dao import ReportDataAccess
 from ..views import report_view
 from datetime import datetime
