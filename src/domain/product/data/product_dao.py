@@ -54,10 +54,10 @@ class ProductDataAccess():
         for data in zip(product_id, amount):
             values.append(data)
         
-        session.execute(f"""update northwind.products
+        session.executemany(f"""update northwind.products
                          set unitsinstock = unitsinstock - o.amount, unitsonorder = unitsonorder + o.amount
                          from ( values 
-                               (%d, %d)
+                               (%s, %s)
                         ) as o(product_id, amount)
                          where productid = o.product_id;""",
                          values)
