@@ -106,8 +106,6 @@ class OrderController():
                 report += f'Cliente: {report_data["company_name"]}\n'
                 report += f'Data: {report_data["order_date"]}\n'
                 report += f'Itens do Pedido: \n'
-                # for product in report_data['products']:
-                #     report += f'| {product["name"]} | {product["quantity"]} | {product["price"]} |\n'
 
 
                 self.orderConsultView.table('Dados do Pedido', ['nome', 'quantidade', 'preço total'], report_data['products'], report)

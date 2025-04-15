@@ -71,7 +71,10 @@ class registerOrderView(Toplevel):
     self.buttonAdd.bind('<Button>', OrderController.enterAddHandler)
 
   def showView(self, title, msg):
-    messagebox.showinfo(title, msg)
+    self.__message_view = Toplevel(master=self)
+    self.__message_view.title(title)
+    messageLabel = Label(self.__message_view, text=msg, anchor="w")
+    messageLabel.pack(side="top", anchor="w")
 
 
 #--------------------------------------------------------------
@@ -98,12 +101,6 @@ class consultOrderView(Toplevel):
     self.buttonSubmit = Button(self.frameButton, text='Consultar')
     self.buttonSubmit.pack(side='left')
     self.buttonSubmit.bind('<Button>', OrderController.searchHandler)
-
-  def showView(self, title, msg):
-    self.__message_view = Toplevel(master=self)
-    self.__message_view.title(title)
-    messageLabel = Label(self.__message_view, text=msg, anchor="w")
-    messageLabel.pack(side="top", anchor="w")
 
   def table(self, title, columns, rows, message):
     self.__message_view = Toplevel(master=self)

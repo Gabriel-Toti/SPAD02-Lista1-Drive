@@ -45,5 +45,23 @@ class ReportDataAccess():
                 
 
     @staticmethod
-    def employees_report(inital_date: date, end_date: date):
-        pass
+    def employees_report(inital_date: date, final_date: date):
+        report = []
+        with database() as connection:
+            with connection.cursor() as session:
+                session.execute(f"""select e.firstname, e.lastname, sum(d.quantity) as total_quantity, sum(d.unitprice * d.quantity) as total_value
+                                    from northwind.orders o join northwind.order_details d on o.orderid = d.orderid
+                                    join northwind.employees e on o.employeeid = e.employeeid
+                                    where o.orderdate between '{inital_date}' and '{final_date}'
+                                    group by e.firstname, e.lastname
+                                    order by total_value desc;""")
+                rows = session.fetchall()
+
+                if len(rows) == 0:
+                    raise NotFoundException(f"Nenhum pedido encontrado no intervalo '{inital_date}' - '{final_date}'.")
+                
+                for row in rows:
+                    report.append((f"{row[0]} {row[1]}", row[2], f"R${row[3]:,.2f}"))
+        return report
+                
+                

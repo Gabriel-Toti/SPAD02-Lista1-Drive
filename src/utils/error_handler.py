@@ -11,6 +11,8 @@ class ErrorHandler():
     @staticmethod
     def catchError(error: Exception): # Gerar uma mensagem de erro
         #TODO: Adicionar os tipos de erros da aplicação para fazer a verificação
+        if type(error) == ValueError:
+            return logger.log(error=error, level=MessageLevel.WARNING)
 
         if type(error) == NotFoundException:
             return logger.log(error=error, level=MessageLevel.WARNING)
