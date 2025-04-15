@@ -11,9 +11,10 @@ class ProductDataAccess():
     @staticmethod
     def get_product_by_name(name: str):
         product = None
+        req_name = name.replace("'", "''")
         with database() as connection:
             with connection.cursor() as session:
-                session.execute(f"select * from northwind.products where productname = '{name}';")
+                session.execute(f"select * from northwind.products where productname = '{req_name}';")
                 row = session.fetchall()
                 if(len(row) == 0):
                     raise NotFoundException(f"Produto '{name}' não encontrado.")

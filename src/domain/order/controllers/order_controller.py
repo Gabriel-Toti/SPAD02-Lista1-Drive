@@ -27,42 +27,35 @@ class OrderController():
 #------------------------------------
 
     def enterRegisterHandler(self, event):
-
-        self.checkState(event)
-        
-        first_name = self.orderRegisterView.employee_fname.get()
-        last_name = self.orderRegisterView.employee_lname.get()
-        contact_name = self.orderRegisterView.customer_name.get()
-        order_date = self.orderRegisterView.order_date.get()
-
-        if(first_name == '' or last_name == '' or contact_name == '' or order_date == ''):
-            self.orderRegisterView.showView('Erro', 'Há campos em branco!')
-            return
-
         try:
-            datetime.strptime(order_date, '%Y-%m-%d')
-        except ValueError:
-            self.orderRegisterView.showView('Erro', 'Data inválida! Use o formato AAAA-MM-DD.')
-            return
+            self.checkState(event)
+            
+            first_name = self.orderRegisterView.employee_fname.get()
+            last_name = self.orderRegisterView.employee_lname.get()
+            customer_name = self.orderRegisterView.customer_name.get()
+            order_date = self.orderRegisterView.order_date.get()
 
-        if not self.list:
-            self.orderRegisterView.showView('Erro', 'Adicione pelo menos um produto!')
-            return
-        
-        # register = Order.Order(order_id, employee, customer, order_date, required_date, shipped_date, freight, ship_name, ship_country, shipper)
-        #enviar register para o banco de dados
-        #se der erro, mostrar mensagem de erro
+            if(first_name == '' or last_name == '' or customer_name == '' or order_date == ''):
+                raise ValueError('Há campos em branco!')
 
-        register = 'ok'
+            try:
+                datetime.strptime(order_date, '%Y-%m-%d')
+            except ValueError:
+                raise ValueError('Data inválida! Use o formato AAAA-MM-DD.')
 
-        if register == 'ok': #definir o tipo de retorno do BD, se int / boolean / string
+            if not self.list:
+                raise ValueError('Adicione pelo menos um produto!')
+            
+            
+            self.__create_order(first_name, last_name, customer_name, self.list, order_date)
+
+
             self.orderRegisterView.showView('Sucesso', 'Pedido cadastrado!')
             self.orderRegisterView.state.set(0)
             self.list.clear()
             self.clearRegisterHandler(event)
-            return
-            
-        self.orderRegisterView.showView('Erro', 'Erro ao cadastrar produto!')
+        except Exception as error:
+            ErrorHandler.showError(ErrorHandler.catchError(error))
 
 #------------------------------------
 
@@ -72,16 +65,13 @@ class OrderController():
         quantity = self.orderRegisterView.quantity.get().strip()
 
         if(product_name == ''):
-            self.orderRegisterView.showView('Erro', 'Preencha o nome do produto!')
-            return
+            raise ValueError("Preencha o nome do produto.")
             
         if (quantity == ''):
-            self.orderRegisterView.showView('Erro', 'Preencha a quantidade!')
-            return
+            raise ValueError('Preencha a quantidade!')
         
         if not quantity.isdigit() or int(quantity) <= 0:
-            self.orderRegisterView.showView('Erro', 'Quantidade inválida!')
-            return
+            raise ValueError("'Quantidade inválida!'")
 
         self.list.append((product_name, int(quantity)))
         self.orderRegisterView.frameListbox.insert(END, f"Produto: {product_name} | Quantidade: {quantity}")
@@ -91,21 +81,17 @@ class OrderController():
         self.orderRegisterView.quantity.delete(
             0, len(self.orderRegisterView.quantity.get()))
 
-    def enterInjectionAddHandler(self, event):
-        #LÓGICA DE INSERÇÃO POR INJECTION
-        pass
-
 #------------------------------------
 
     def searchHandler(self, event):
 
-            order = self.orderConsultView.order_id.delete(
+            order_id = self.orderConsultView.order_id.delete(
                 0, len(self.orderConsultView.order_id.get()))
 
-            self.checkOrder(order)
+            report_data = self.__get_order_report(order_id)
             
-            if (order is not None):
-                str = ''
+            if (report_data is not None):
+                report = ''
                 #str += f'Pedido: {order.order_id}\n'
                 #str += f'Vendedor: {employee.first_name} {employee.last_name}\n'
                 #str += f'Cliente: {customer.customer_name}\n'
@@ -114,7 +100,7 @@ class OrderController():
                 #for i in self.order_details:
                 #  str += f'{i.product_name} - {i.quantity} = {i.total}\n'
 
-                self.orderConsultView.showView('Dados do Pedido', str)
+                self.orderConsultView.showView('Dados do Pedido', report)
                 self.orderConsultView.order_id.delete(
                     0, len(self.orderConsultView.order_id.get()))
                 return
@@ -155,40 +141,31 @@ class OrderController():
             print("sem injection")
             return
 
-    def checkOrder(self, order):
-        #LÓGICA QUE VERIFICA SE PEDIDO EXISTE NO BD E DEVOLVE RESULTADO (LIST)
-        pass
-
 #------------------------------------
 
-    def create_order(self): # Callback
+    def __create_order(self, first_name: str, last_name: str, customer_name: str, products_data: list[tuple[str, int]], order_date: date): # Callback
             connetion = database()
             try: 
-                #TODO: Pegar tudo das views
-                fn, ln = "Nancy", "Davolio"
-                cn = "Around the Horn"
-                pn = ["Chai", "Chang"]
-                qtds = [20, 5]
-
-
-                employee = EmployeeDataAccess.get_employee_by_name(fn, ln)
-                customer = CustomerDataAccess.get_customer_by_name(cn)
+                employee = EmployeeDataAccess.get_employee_by_name(first_name, last_name)
+                customer = CustomerDataAccess.get_customer_by_name(customer_name)
                 
                 products = []
                 products_ids = []
+                quantities = []
 
-                for name, qtd in zip(pn, qtds):
+                for name, quantity in products_data:
                     product = ProductDataAccess.get_product_by_name(name) # Produto por produto, porque se um não existir, é mais fácil de indicar qual
 
                     # Verificação de estoque
-                    if(product.units_in_stock < qtd):
+                    if(product.units_in_stock < quantity):
                         raise OutOfStockException(f"Não há unidades suficientes de '{product.product_name}' para o pedido.")
                     
-                    products.append((product, qtd))
+                    products.append((product, quantity))
+                    quantities.append(quantity)
                     products_ids.append(product.product_id)
 
                 order_id = OrderDataAccess.get_last_order_id() + 1 # Gera um id para o produto baseado nos que já existem
-                order = Order(order_id, customer.customer_id, employee.employee_id, date.today())
+                order = Order(order_id, customer.customer_id, employee.employee_id, order_date)
                 
                 details_list = []
                 
@@ -202,7 +179,7 @@ class OrderController():
 
                 OrderDataAccess.create_order(order, session)
                 OrderDetailsDataAccess.create_many_order_details(details_list, session)
-                ProductDataAccess.update_many_products_stock(products_ids, qtds, session)
+                ProductDataAccess.update_many_products_stock(products_ids, quantities, session)
 
                 session.close()
                 connetion.commit()
@@ -210,4 +187,7 @@ class OrderController():
 
             except Exception as error:
                 connetion.rollback()
-                ErrorHandler.showError(ErrorHandler.catchError(error))
+                raise error
+    def __get_order_report(self, order):
+        #LÓGICA QUE VERIFICA SE PEDIDO EXISTE NO BD E DEVOLVE RESULTADO (LIST)
+        pass
