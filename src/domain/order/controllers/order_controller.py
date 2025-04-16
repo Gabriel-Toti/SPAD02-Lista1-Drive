@@ -203,7 +203,7 @@ class OrderController():
                 quantities = []
 
                 for name, quantity in products_data:
-                    product = ProductDataAccess.get_product_by_name(name) # Produto por produto, porque se um não existir, é mais fácil de indicar qual
+                    product = ProductDataAccess.get_product_by_name_safe(name) # Produto por produto, porque se um não existir, é mais fácil de indicar qual
 
                     # Verificação de estoque
                     if(product.units_in_stock < quantity):
