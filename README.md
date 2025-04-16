@@ -10,7 +10,6 @@ Este projeto tem como objetivo implementar uma aplicação para inserção de pe
   - SQL Inseguro (com SQL Injection proposital)
   - SQL Seguro (com parâmetros - `psycopg`)
   - [ORM (usando SQLAlchemy)](https://github.com/Gabriel-Toti/SPAD02-Lista1-ORM)
-- Verificação e inserção automática de clientes e funcionários, se não existirem.
 - Relatórios:
   - 📄 **Detalhes de um pedido**: número, data, cliente, vendedor, itens com produto, quantidade e preço.
   - 🏆 **Ranking de funcionários**: total de pedidos e valor vendido por período.
@@ -27,7 +26,7 @@ Este projeto tem como objetivo implementar uma aplicação para inserção de pe
 ## Como Executar
 1. **Clone o repositório**:
 ```bash
-git clone https://github.com/luiiizfernando/mvc-dao.git
+git clone https://github.com/Gabriel-Toti/SPAD02-Lista1-Drive.git
 cd SPAD02-Lista1-Drive
 
 2. Instale as dependências:
