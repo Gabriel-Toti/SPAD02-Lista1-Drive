@@ -9,7 +9,7 @@ class ProductDataAccess():
         pass
 
     @staticmethod
-    def get_product_by_name(name: str):
+    def get_product_by_name_safe(name: str):
         product = None
         req_name = name.replace("'", "''")
         with database() as connection:
