@@ -53,11 +53,14 @@ class OrderController():
 
 
             self.orderRegisterView.showView('Sucesso', 'Pedido cadastrado!')
+
+        except Exception as error:
+            ErrorHandler.showError(ErrorHandler.catchError(error))
+        finally:
             self.orderRegisterView.state.set(0)
             self.list.clear()
             self.clearRegisterHandler(event)
-        except Exception as error:
-            ErrorHandler.showError(ErrorHandler.catchError(error))
+            self.orderRegisterView.frameListbox.delete(0, END)
 
 #------------------------------------
 
